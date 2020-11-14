@@ -12,9 +12,13 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import com.endrawan.flooddetector.R
 import com.endrawan.flooddetector.adapters.MapsAdapter
 import com.endrawan.flooddetector.helper.Dummies
+import com.endrawan.flooddetector.models.Device
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
+import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
@@ -30,6 +34,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private val LAYER_ID = "LAYER_ID"
     private val data = Dummies.Devices
     private lateinit var featureCollection: FeatureCollection
+    private lateinit var mapboxMap: MapboxMap
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +51,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(mapboxMap: MapboxMap) {
+        this@MapsFragment.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.MAPBOX_STREETS) {
             initFeatureCollection()
             initMarkerIcons(it)
@@ -117,7 +123,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.adapter = MapsAdapter(data)
+        recyclerView.adapter = MapsAdapter(mapboxMap, data, object : MapsAdapter.Action {
+            override fun clicked(device: Device) {
+                val latLng = LatLng(device.latitude, device.longitude)
+                val newCameraPosition =
+                    CameraPosition.Builder().target(latLng).build()
+                mapboxMap.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition))
+            }
+
+        })
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(recyclerView)
     }
