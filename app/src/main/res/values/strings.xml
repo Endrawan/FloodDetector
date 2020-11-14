@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FloodDetector</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiZW5kcmF3YW4iLCJhIjoiY2toYzIxeG9xMDRkbjJ5cDVhcjh6dzlidiJ9.eMhmVk8ibSxPhvPny_Sr3A</string>
+
+    <string name="rv_card_name">Location #%1$d</string>
+    <string name="rv_card_bed_info">This location has %1$d beds</string>
+    <string name="toast_instruction">Tap on cards below</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

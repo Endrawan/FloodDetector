@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/devices"
+        android:enabled="true"
+        android:icon="@drawable/ic_devices_black_24dp"
+        android:title="Daftar Alat" />
+    <item
+        android:id="@+id/maps_status"
+        android:enabled="true"
+        android:icon="@drawable/ic_warning_black_24dp"
+        android:title="Peta Status" />
+    <item
+        android:id="@+id/current_position"
+        android:enabled="true"
+        android:icon="@drawable/ic_position_black_24dp"
+        android:title="Posisi Anda" />
+</menu>
