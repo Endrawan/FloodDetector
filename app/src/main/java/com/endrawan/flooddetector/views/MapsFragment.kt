@@ -4,15 +4,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.endrawan.flooddetector.R
+import com.endrawan.flooddetector.adapters.MapsAdapter
+import com.endrawan.flooddetector.helper.Dummies
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory.*
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import kotlinx.android.synthetic.main.fragment_maps.*
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
+
+    private val SYMBOL_ICON_ID = "SYMBOL_ICON_ID"
+    private val SOURCE_ID = "SOURCE_ID"
+    private val LAYER_ID = "LAYER_ID"
+    private val data = Dummies.Devices
+    private lateinit var featureCollection: FeatureCollection
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +46,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(mapboxMap: MapboxMap) {
-        mapboxMap.setStyle(Style.MAPBOX_STREETS)
-        Toast.makeText(requireContext(), "Map Ready!", Toast.LENGTH_SHORT).show()
+        mapboxMap.setStyle(Style.MAPBOX_STREETS) {
+            initFeatureCollection()
+            initMarkerIcons(it)
+            initRecyclerView()
+        }
     }
 
     override fun onResume() {
@@ -66,5 +86,39 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView.onSaveInstanceState(outState)
+    }
+
+    private fun initFeatureCollection() {
+        val featureList = mutableListOf<Feature>()
+        for (d in data) {
+            featureList.add(
+                Feature.fromGeometry(Point.fromLngLat(d.longitude, d.latitude))
+            )
+        }
+        featureCollection = FeatureCollection.fromFeatures(featureList)
+    }
+
+    private fun initMarkerIcons(loadedMapStyle: Style) {
+        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_device)
+        loadedMapStyle.addImage(
+            SYMBOL_ICON_ID, drawable!!
+        )
+        loadedMapStyle.addSource(GeoJsonSource(SOURCE_ID, featureCollection))
+        loadedMapStyle.addLayer(
+            SymbolLayer(LAYER_ID, SOURCE_ID).withProperties(
+                iconImage(SYMBOL_ICON_ID),
+                iconAllowOverlap(true),
+                iconOffset(arrayOf(0f, -4f))
+            )
+        )
+    }
+
+    private fun initRecyclerView() {
+        recyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.adapter = MapsAdapter(data)
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(recyclerView)
     }
 }
