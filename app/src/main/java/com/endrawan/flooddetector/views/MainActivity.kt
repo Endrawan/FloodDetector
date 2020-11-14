@@ -1,9 +1,9 @@
-package com.endrawan.flooddetector
+package com.endrawan.flooddetector.views
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.endrawan.flooddetector.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,18 +21,14 @@ class MainActivity : AppCompatActivity() {
         bottom_navigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.devices -> {
-                    Toast.makeText(applicationContext, "Devices", Toast.LENGTH_SHORT).show()
                     changeFragment(devicesFragment)
                     true
                 }
                 R.id.maps_status -> {
-                    Toast.makeText(applicationContext, "Maps Status", Toast.LENGTH_SHORT).show()
                     changeFragment(mapsFragment)
                     true
                 }
                 R.id.current_position -> {
-                    Toast.makeText(applicationContext, "Current Position", Toast.LENGTH_SHORT)
-                        .show()
                     changeFragment(positionFragment)
                     true
                 }

@@ -1,9 +1,10 @@
-package com.endrawan.flooddetector
+package com.endrawan.flooddetector.views
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import com.endrawan.flooddetector.R
 
 class SplashScreenActivity : AppCompatActivity() {
 

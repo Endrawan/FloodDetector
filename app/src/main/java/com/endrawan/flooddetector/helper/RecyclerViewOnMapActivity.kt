@@ -131,15 +131,6 @@ class RecyclerViewOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
         snapHelper.attachToRecyclerView(recyclerView)
     }
 
-//    private fun initMarkerIcons(loadedMapStyle: Style) {
-//        loadedMapStyle.addImage(SYMBOL_ICON_ID,
-//        BitmapFactory.decodeResource(this.resources, R.drawable.red_marker))
-//        loadedMapStyle.addSource(GeoJsonSource(SOURCE_ID, featureCollection))
-//        loadedMapStyle.addLayer(SymbolLayer(LAYER_ID, SOURCE_ID).withProperties(
-//
-//        ))
-//    }
-
     private fun initMarkerIcons(loadedMapStyle: Style) {
         loadedMapStyle.addImage(
             SYMBOL_ICON_ID, BitmapFactory.decodeResource(

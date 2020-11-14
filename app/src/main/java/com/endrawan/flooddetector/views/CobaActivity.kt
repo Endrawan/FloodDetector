@@ -1,7 +1,8 @@
-package com.endrawan.flooddetector
+package com.endrawan.flooddetector.views
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.endrawan.flooddetector.R
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.maps.Style
 import kotlinx.android.synthetic.main.activity_coba.*
