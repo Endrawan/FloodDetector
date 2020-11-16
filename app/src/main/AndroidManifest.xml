@@ -12,6 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FloodDetector">
+        <activity android:name=".helper.DirectionsActivity"></activity>
+        <activity android:name=".helper.LocationChangeListeningActivity"></activity>
         <activity android:name=".views.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,9 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".helper.RecyclerViewOnMapActivity"></activity>
-        <activity android:name=".views.CobaActivity"></activity>
-        <activity android:name=".views.MainActivity"></activity>
+        <activity android:name=".helper.RecyclerViewOnMapActivity" />
+        <activity android:name=".views.CobaActivity" />
+        <activity android:name=".views.MainActivity" />
     </application>
 
 </manifest>
