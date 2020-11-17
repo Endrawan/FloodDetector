@@ -13,51 +13,88 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:padding="@dimen/normal">
+        android:padding="@dimen/small">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="@dimen/xxsmall"
+            android:src="@drawable/ic_device" />
 
         <TextView
             android:id="@+id/type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/xsmall"
-            android:textSize="18sp"
+            android:layout_marginBottom="@dimen/xxsmall"
+            android:textSize="14sp"
             android:textStyle="bold"
             tools:text="Sensor" />
-
-        <TextView
-            android:id="@+id/latitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Lat: 12478214" />
-
-
-        <TextView
-            android:id="@+id/longitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small"
-            tools:text="Long: 12478214" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:layout_marginBottom="@dimen/xsmall"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/latitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Lat: 12478214" />
+
+            <TextView
+                android:id="@+id/longitude"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="Long: 12478214" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/show_location"
+                style="@style/Theme.FloodDetector.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="@dimen/xsmall"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@drawable/button_border"
+                android:drawableStart="@drawable/ic_location_blue_24dp"
+                android:paddingStart="@dimen/small"
+                android:paddingTop="@dimen/xsmall"
+                android:paddingEnd="@dimen/small"
+                android:paddingBottom="@dimen/xsmall"
+                android:text="Lokasi"
+                android:textColor="@color/blue_600" />
 
 
             <Button
                 android:id="@+id/show_directions"
+                style="@style/Theme.FloodDetector.Button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/xsmall"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@drawable/button_border"
+                android:drawableStart="@drawable/ic_route_blue_24dp"
+                android:paddingStart="@dimen/small"
+                android:paddingTop="@dimen/xsmall"
+                android:paddingEnd="@dimen/small"
+                android:paddingBottom="@dimen/xsmall"
+                android:text="Rute"
+                android:textColor="@color/blue_600" />
 
         </LinearLayout>
 

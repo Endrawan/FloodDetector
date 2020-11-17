@@ -158,12 +158,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.adapter = MapsAdapter(mapboxMap, data, object : MapsAdapter.Action {
-            override fun clicked(device: Device) {
+        recyclerView.adapter = MapsAdapter(data, object : MapsAdapter.Action {
+
+            override fun locationClicked(device: Device) {
                 val latLng = LatLng(device.latitude, device.longitude)
                 val newCameraPosition =
-                    CameraPosition.Builder().target(latLng).build()
+                    CameraPosition.Builder().target(latLng).zoom(mapboxMap.cameraPosition.zoom)
+                        .build()
                 mapboxMap.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition))
+            }
+
+            override fun directionsClicked(device: Device) {
+                Toast.makeText(activity, "Directions Clicked!", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -218,11 +224,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
                 val location = result.lastLocation ?: return
 
                 // Create a Toast which displays the new location's coordinates
-                Toast.makeText(
-                    fragment.activity,
-                    "New location-> lat:${result.lastLocation?.latitude}, long: ${result.lastLocation?.longitude}",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    fragment.activity,
+//                    "New location-> lat:${result.lastLocation?.latitude}, long: ${result.lastLocation?.longitude}",
+//                    Toast.LENGTH_SHORT
+//                ).show()
 
                 // Pass the new location to the Maps SDK's LocationComponent
                 if (fragment.mapboxMap != null && result.lastLocation != null) {

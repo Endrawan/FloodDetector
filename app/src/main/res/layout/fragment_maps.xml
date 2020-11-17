@@ -19,7 +19,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="32dp"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/rv_on_top_of_map_card"
+        tools:listitem="@layout/item_maps"
         tools:orientation="horizontal"
         tools:scrollbars="horizontal" />
 

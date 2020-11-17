@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.endrawan.flooddetector.R
 import com.endrawan.flooddetector.models.Device
-import com.mapbox.mapboxsdk.maps.MapboxMap
 import kotlinx.android.synthetic.main.item_maps.view.*
 
-class MapsAdapter(val mapboxMap: MapboxMap, val devices: List<Device>, val action: Action) :
+class MapsAdapter(private val devices: List<Device>, private val action: Action) :
     RecyclerView.Adapter<MapsAdapter.MapsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MapsViewHolder =
@@ -24,22 +23,26 @@ class MapsAdapter(val mapboxMap: MapboxMap, val devices: List<Device>, val actio
 
     override fun getItemCount(): Int = devices.size
 
-    class MapsViewHolder(val view: View, val action: Action) : RecyclerView.ViewHolder(view) {
+    class MapsViewHolder(view: View, private val action: Action) : RecyclerView.ViewHolder(view) {
         val type = view.type
         val latitude = view.latitude
         val longitude = view.longitude
+        val location = view.show_location
+        val directions = view.show_directions
 
         fun bind(device: Device) {
             type.text = device.type
-            latitude.text = "Lat: ${device.latitude}"
-            longitude.text = "Long: ${device.longitude}"
-            view.setOnClickListener {
-                action.clicked(device)
-            }
+            val lat = String.format("%.5f", device.latitude).toDouble()
+            val long = String.format("%.5f", device.longitude).toDouble()
+            latitude.text = "Lat: $lat"
+            longitude.text = "Long: $long"
+            location.setOnClickListener { action.locationClicked(device) }
+            directions.setOnClickListener { action.directionsClicked(device) }
         }
     }
 
     interface Action {
-        fun clicked(device: Device)
+        fun locationClicked(device: Device)
+        fun directionsClicked(device: Device)
     }
 }
