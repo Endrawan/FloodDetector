@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.endrawan.flooddetector.R
+import com.endrawan.flooddetector.internal.Extension.makeStatusBarTransparent
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        makeStatusBarTransparent()
         changeFragment(devicesFragment)
 
         bottom_navigation.setOnNavigationItemSelectedListener {

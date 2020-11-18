@@ -88,6 +88,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
     override fun onMapReady(mapboxMap: MapboxMap) {
         this@MapsFragment.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.MAPBOX_STREETS) {
+            changeMapLanguage(it)
             initFeatureCollection()
             initMarkerIcons(it)
             initRoutesSource(it)
@@ -146,6 +147,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView.onSaveInstanceState(outState)
+    }
+
+    private fun changeMapLanguage(style: Style) {
+        val mapText = style.getLayer("country-label")
+        mapText?.setProperties(textField("{name_id}"))
     }
 
     private fun initFeatureCollection() {
