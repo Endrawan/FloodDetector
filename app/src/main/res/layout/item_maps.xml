@@ -28,7 +28,8 @@
             android:layout_marginBottom="@dimen/xxsmall"
             android:textSize="14sp"
             android:textStyle="bold"
-            tools:text="Sensor" />
+            tools:text="Sensor"
+            android:textColor="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"

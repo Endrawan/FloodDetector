@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FloodDetector">
-        <activity android:name=".helper.DirectionsActivity"></activity>
-        <activity android:name=".helper.LocationChangeListeningActivity"></activity>
+        <activity android:name=".views.DetailActivity"></activity>
+        <activity android:name=".helper.DirectionsActivity" />
+        <activity android:name=".helper.LocationChangeListeningActivity" />
         <activity android:name=".views.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

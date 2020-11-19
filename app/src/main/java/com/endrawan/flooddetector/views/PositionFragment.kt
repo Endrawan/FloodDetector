@@ -1,6 +1,7 @@
 package com.endrawan.flooddetector.views
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.endrawan.flooddetector.R
 import com.endrawan.flooddetector.adapters.DevicesAdapter
 import com.endrawan.flooddetector.helper.Dummies
+import com.endrawan.flooddetector.models.Device
+import com.google.gson.Gson
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.api.geocoding.v5.GeocodingCriteria
@@ -33,13 +36,13 @@ import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
- * Use the [PositionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class PositionFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
 
     private lateinit var permissionsManager: PermissionsManager
     private lateinit var mapboxMap: MapboxMap
+    private val gson = Gson()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -117,7 +120,16 @@ class PositionFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
     private fun initRecyclerView() {
         updateTextViewDescription(Dummies.Devices.size)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = DevicesAdapter(Dummies.Devices)
+        recyclerView.adapter = DevicesAdapter(Dummies.Devices, object : DevicesAdapter.Action {
+            override fun itemClicked(device: Device) {
+                startActivity(
+                    Intent(activity, DetailActivity::class.java).apply {
+                        putExtra("DEVICE", gson.toJson(device))
+                    }
+                )
+            }
+
+        })
     }
 
     private fun retrieveLocation(location: Point) {

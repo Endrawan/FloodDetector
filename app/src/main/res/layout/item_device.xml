@@ -10,24 +10,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="@dimen/small">
 
-        <TextView
-            android:id="@+id/type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/xsmall"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="Sensor" />
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_device"
+            android:layout_marginEnd="@dimen/small"
+            android:layout_marginTop="@dimen/xxsmall" />
 
-        <TextView
-            android:id="@+id/deviceID"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="id:f734272eeee1c17d5ac2b7522521fa34f053ed35" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/xsmall"
+                style="@style/Theme.FloodDetector.TextView.ItemTitle"
+                tools:text="Sensor" />
+
+            <TextView
+                android:id="@+id/deviceID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="id:f734272eeee1c17d5ac2b7522521fa34f053ed35" />
+
+            <TextView
+                android:id="@+id/latlong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Lat: 1293714289, Long: 12441" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>

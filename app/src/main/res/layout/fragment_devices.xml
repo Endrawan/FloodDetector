@@ -19,7 +19,8 @@
             android:layout_marginEnd="@dimen/normal"
             android:text="Daftar Devices"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/black" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

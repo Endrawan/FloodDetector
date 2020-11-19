@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
-    tools:context=".views.PositionFragment">
+    tools:context=".views.DetailActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,33 +18,42 @@
             android:layout_marginBottom="@dimen/normal"
             mapbox:mapbox_cameraZoom="10" />
 
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="@dimen/normal"
+            android:layout_marginBottom="@dimen/normal"
+            android:src="@drawable/ic_device" />
+
         <TextView
-            android:id="@+id/city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small"
-            android:paddingStart="@dimen/normal"
-            android:paddingEnd="@dimen/normal"
-            android:text="Nama Kota"
+            android:id="@+id/deviceName"
             style="@style/Theme.FloodDetector.TextView.Title"
-            tools:text="Bandung" />
-
-        <TextView
-            android:id="@+id/deviceCountDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/xxsmall"
             android:paddingStart="@dimen/normal"
             android:paddingEnd="@dimen/normal"
-            android:text="Sedang membaca data ..."
-            tools:text="Terdapat 2 buah titik banjir di lokasi anda: " />
+            tools:text="Nama Device" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <TextView
+            android:id="@+id/deviceLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:overScrollMode="never"
-            android:padding="@dimen/small"
-            tools:listitem="@layout/item_device" />
+            android:layout_marginBottom="@dimen/normal"
+            android:paddingStart="@dimen/normal"
+            android:paddingEnd="@dimen/normal"
+            tools:text="Bandung, Jawa Barat, Indonesia"
+            android:text="Lokasi alat..." />
+
+        <TextView
+            android:id="@+id/deviceDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/normal"
+            android:paddingStart="@dimen/normal"
+            android:paddingEnd="@dimen/normal"
+            tools:text="@string/lorem_ipsum" />
 
     </LinearLayout>
 
