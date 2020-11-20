@@ -31,7 +31,7 @@ class MapsAdapter(private val devices: List<Device>, private val action: Action)
         val directions = view.show_directions
 
         fun bind(device: Device) {
-            type.text = device.type
+            type.text = device.name
             val lat = String.format("%.5f", device.latitude).toDouble()
             val long = String.format("%.5f", device.longitude).toDouble()
             latitude.text = "Lat: $lat"

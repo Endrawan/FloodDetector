@@ -96,7 +96,7 @@ class DetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun updateView() {
-        deviceName.text = device.type
+        deviceName.text = device.name
         deviceDescription.text =
             "ID: ${device.ID}\nLatitude: ${device.latitude}\nLongitude: ${device.longitude}"
         deviceLocation.text = location

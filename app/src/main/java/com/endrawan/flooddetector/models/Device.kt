@@ -1,9 +1,9 @@
 package com.endrawan.flooddetector.models
 
 data class Device(
-    val ID: String,
-    val type: String,
-    val latitude: Double,
-    val longitude: Double,
-    val height: Double
+    var ID: String = "",
+    var name: String = "",
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0,
+    var height: Double = 0.0
 )

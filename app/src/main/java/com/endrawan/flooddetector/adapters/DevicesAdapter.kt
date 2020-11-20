@@ -31,7 +31,7 @@ class DevicesAdapter(private val devices: List<Device>, private val action: Acti
 
         fun bind(device: Device) {
             ID.text = device.ID
-            type.text = device.type
+            type.text = device.name
             latLong.text = "Lat: ${device.latitude}, Long: ${device.longitude}"
             view.setOnClickListener { action.itemClicked(device) }
         }

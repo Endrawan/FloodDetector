@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.endrawan.flooddetector.R
 import com.endrawan.flooddetector.adapters.MapsAdapter
-import com.endrawan.flooddetector.helper.Dummies
 import com.endrawan.flooddetector.models.Device
 import com.mapbox.android.core.location.*
 import com.mapbox.android.core.permissions.PermissionsListener
@@ -61,7 +60,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
     private val ROUTE_SOURCE_ID = "route-source-id"
     private val TAG = "MapsFragment"
 
-    private val data = Dummies.Devices
+    private lateinit var act: MainActivity
+    private lateinit var adapter: MapsAdapter
+    private val devices = mutableListOf<Device>()
 
     private lateinit var featureCollection: FeatureCollection
     private lateinit var mapboxMap: MapboxMap
@@ -70,6 +71,38 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
     private lateinit var currentRoute: DirectionsRoute
     private lateinit var client: MapboxDirections
     private var callback = LocationChangeMapsFragmentLocationCallback(this)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        act = activity as MainActivity
+        adapter = MapsAdapter(devices, object : MapsAdapter.Action {
+
+            override fun locationClicked(device: Device) {
+                val latLng = LatLng(device.latitude, device.longitude)
+                val newCameraPosition =
+                    CameraPosition.Builder().target(latLng).zoom(mapboxMap.cameraPosition.zoom)
+                        .build()
+                mapboxMap.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition))
+            }
+
+            override fun directionsClicked(device: Device) {
+                Toast.makeText(activity, "Directions Clicked!", Toast.LENGTH_SHORT).show()
+                val lastLocation = mapboxMap.locationComponent.lastKnownLocation
+                if (lastLocation == null) {
+                    Toast.makeText(
+                        activity,
+                        "Lokasi anda tidak dapat ditemukan, silahkan coba lagi!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    val origin = Point.fromLngLat(lastLocation.longitude, lastLocation.latitude)
+                    val destination = Point.fromLngLat(device.longitude, device.latitude)
+                    Log.d(TAG, "origin: $origin, destination: $destination")
+                    getRoute(mapboxMap, origin, destination)
+                }
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,13 +116,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
         super.onViewCreated(view, savedInstanceState)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+        act.devicesLiveData.observe(this, {
+            devices.clear()
+            devices.addAll(it)
+            initFeatureCollection()
+            refreshRecyclerView()
+        })
     }
 
     override fun onMapReady(mapboxMap: MapboxMap) {
         this@MapsFragment.mapboxMap = mapboxMap
         mapboxMap.setStyle(Style.MAPBOX_STREETS) {
             changeMapLanguage(it)
-            initFeatureCollection()
             initMarkerIcons(it)
             initRoutesSource(it)
             initRoutesLayer(it)
@@ -156,7 +194,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
 
     private fun initFeatureCollection() {
         val featureList = mutableListOf<Feature>()
-        for (d in data) {
+        for (d in devices) {
             featureList.add(
                 Feature.fromGeometry(Point.fromLngLat(d.longitude, d.latitude))
             )
@@ -183,36 +221,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.adapter = MapsAdapter(data, object : MapsAdapter.Action {
-
-            override fun locationClicked(device: Device) {
-                val latLng = LatLng(device.latitude, device.longitude)
-                val newCameraPosition =
-                    CameraPosition.Builder().target(latLng).zoom(mapboxMap.cameraPosition.zoom)
-                        .build()
-                mapboxMap.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition))
-            }
-
-            override fun directionsClicked(device: Device) {
-                Toast.makeText(activity, "Directions Clicked!", Toast.LENGTH_SHORT).show()
-                val lastLocation = mapboxMap.locationComponent.lastKnownLocation
-                if (lastLocation == null) {
-                    Toast.makeText(
-                        activity,
-                        "Lokasi anda tidak dapat ditemukan, silahkan coba lagi!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    val origin = Point.fromLngLat(lastLocation.longitude, lastLocation.latitude)
-                    val destination = Point.fromLngLat(device.longitude, device.latitude)
-                    Log.d(TAG, "origin: $origin, destination: $destination")
-                    getRoute(mapboxMap, origin, destination)
-                }
-            }
-
-        })
+        recyclerView.adapter = adapter
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun refreshRecyclerView() {
+        adapter.notifyDataSetChanged()
     }
 
     @SuppressLint("MissingPermission")
