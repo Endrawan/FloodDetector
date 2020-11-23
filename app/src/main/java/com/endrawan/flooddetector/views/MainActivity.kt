@@ -1,5 +1,6 @@
 package com.endrawan.flooddetector.views
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -7,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.endrawan.flooddetector.R
 import com.endrawan.flooddetector.internal.Extension.makeStatusBarTransparent
 import com.endrawan.flooddetector.models.Device
+import com.endrawan.flooddetector.services.FirebaseBackgroundService
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -26,6 +28,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        startService(Intent(FirebaseBackgroundService::class.java.name))
+        Intent(this, FirebaseBackgroundService::class.java).also {
+            startService(it)
+        }
 
         makeStatusBarTransparent()
         changeFragment(devicesFragment)
