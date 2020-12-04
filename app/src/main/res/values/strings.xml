@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FloodDetector</string>
+    <string name="app_name">Jamet Apps</string>
     <string name="mapbox_access_token">pk.eyJ1IjoiZW5kcmF3YW4iLCJhIjoiY2toYzIxeG9xMDRkbjJ5cDVhcjh6dzlidiJ9.eMhmVk8ibSxPhvPny_Sr3A</string>
 
     <string name="rv_card_name">Location #%1$d</string>
