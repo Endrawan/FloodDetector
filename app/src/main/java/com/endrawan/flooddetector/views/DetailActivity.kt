@@ -3,7 +3,9 @@ package com.endrawan.flooddetector.views
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.endrawan.flooddetector.R
+import com.endrawan.flooddetector.configs.ImageConfig
 import com.endrawan.flooddetector.internal.Extension.makeStatusBarTransparent
 import com.endrawan.flooddetector.models.Device
 import com.google.gson.Gson
@@ -96,10 +98,22 @@ class DetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun updateView() {
+        var statusText = ""
         deviceName.text = device.name
+        statusText = if (device.status) "Banjir" else "Aman"
         deviceDescription.text =
-            "ID: ${device.ID}\nLatitude: ${device.latitude}\nLongitude: ${device.longitude}"
+            "ID: ${device.ID}\nLatitude: ${device.latitude}\nLongitude: ${device.longitude}\n" +
+                    "Altitude: ${device.altitude}\n" +
+                    "Jarak Air: ${device.distance}\n" +
+                    "Status: $statusText"
         deviceLocation.text = location
+        if (device.status) {
+            Glide.with(this).load(ImageConfig.deviceDanger).centerCrop()
+                .into(image)
+        } else {
+            Glide.with(this).load(ImageConfig.deviceNormal).centerCrop()
+                .into(image)
+        }
     }
 
     private fun retrieveLocation(location: Point) {
