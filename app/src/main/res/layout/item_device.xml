@@ -35,10 +35,10 @@
                 tools:text="Sensor" />
 
             <TextView
-                android:id="@+id/deviceID"
+                android:id="@+id/distance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="id:f734272eeee1c17d5ac2b7522521fa34f053ed35" />
+                tools:text="Jarak air: 45 cm" />
 
             <TextView
                 android:id="@+id/latlong"

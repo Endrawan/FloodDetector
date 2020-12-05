@@ -11,6 +11,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.endrawan.flooddetector.R
+import com.endrawan.flooddetector.models.Device
 import com.endrawan.flooddetector.views.MainActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.DataSnapshot
@@ -32,8 +33,13 @@ class FirebaseBackgroundService : Service() {
         FirebaseApp.initializeApp(this)
         val devicesRef = FirebaseDatabase.getInstance().reference.child("devices")
         devicesRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
-                pushNotification(p0.value.toString())
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                dataSnapshot.children.forEach {
+                    val device = it.getValue(Device::class.java)!!
+                    if (device.status) {
+                        pushNotification(device)
+                    }
+                }
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -43,8 +49,11 @@ class FirebaseBackgroundService : Service() {
         })
     }
 
-    private fun pushNotification(message: String) {
+    private fun pushNotification(device: Device) {
         createNotificationChannel()
+
+        val message =
+            "Telah terjadi banjir pada lokasi dengan latitude: ${device.latitude} dan longitude: ${device.longitude}. "
 
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -52,8 +61,8 @@ class FirebaseBackgroundService : Service() {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_flood)
-            .setContentTitle("Flood Detector")
+            .setSmallIcon(R.drawable.ic_jamet)
+            .setContentTitle("Banjir Terdeteksi!!")
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)

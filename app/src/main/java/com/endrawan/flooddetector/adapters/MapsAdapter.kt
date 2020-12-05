@@ -28,20 +28,14 @@ class MapsAdapter(private val devices: List<Device>, private val action: Action)
     class MapsViewHolder(private val view: View, private val action: Action) :
         RecyclerView.ViewHolder(view) {
         val type = view.type
-        val latitude = view.latitude
-        val longitude = view.longitude
         val location = view.show_location
         val directions = view.show_directions
+        val distance = view.distance
         val image = view.image
 
         fun bind(device: Device) {
             type.text = device.name
-//            val lat = String.format("%.5f", device.latitude).toDouble()
-//            val long = String.format("%.5f", device.longitude).toDouble()
-//            latitude.text = "Lat: $lat"
-//            longitude.text = "Long: $long"
-            latitude.text = "Lat: ${device.latitude}"
-            longitude.text = "Long: ${device.longitude}"
+            distance.text = "Jarak Air: ${device.distance} cm"
 
             if (device.status) {
                 Glide.with(view.context).load(ImageConfig.deviceDanger).centerCrop()

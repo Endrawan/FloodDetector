@@ -86,7 +86,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
             }
 
             override fun directionsClicked(device: Device) {
-                Toast.makeText(activity, "Directions Clicked!", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(activity, "Directions Clicked!", Toast.LENGTH_SHORT).show()
                 val lastLocation = mapboxMap.locationComponent.lastKnownLocation
                 if (lastLocation == null) {
                     Toast.makeText(
@@ -338,10 +338,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
                 }
 
                 currentRoute = routes[0]
-                Toast.makeText(
-                    requireContext(), "Distance: ${currentRoute.distance()}",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    requireContext(), "Distance: ${currentRoute.distance()}",
+//                    Toast.LENGTH_SHORT
+//                ).show()
 
                 if (mapboxMap != null) {
                     mapboxMap.getStyle {

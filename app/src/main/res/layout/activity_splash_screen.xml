@@ -12,11 +12,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="256dp"
-            android:layout_height="256dp"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/normal"
-            android:src="@drawable/ic_jamet" />
+            android:src="@drawable/ic_flood" />
 
         <TextView
             android:layout_width="match_parent"
