@@ -2,16 +2,17 @@ package com.endrawan.flooddetector.views
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.endrawan.flooddetector.R
 import com.endrawan.flooddetector.adapters.DevicesAdapter
-import com.endrawan.flooddetector.helper.Dummies
 import com.endrawan.flooddetector.models.Device
 import com.google.gson.Gson
 import com.mapbox.android.core.permissions.PermissionsListener
@@ -27,6 +28,8 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory.textField
+import com.mapbox.turf.TurfConstants.UNIT_KILOMETERS
+import com.mapbox.turf.TurfMeasurement
 import kotlinx.android.synthetic.main.fragment_position.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,9 +43,31 @@ import timber.log.Timber
  */
 class PositionFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
 
+    private val SENSOR_DISTANCE_THRESHOLD = 20 // In Km
+
     private lateinit var permissionsManager: PermissionsManager
     private lateinit var mapboxMap: MapboxMap
+    private val locationLiveData = MutableLiveData<Location?>()
     private val gson = Gson()
+
+    private lateinit var act: MainActivity
+    private lateinit var adapter: DevicesAdapter
+    private val devices = mutableListOf<Device>()
+    private val devicesListRoot = mutableListOf<Device>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        act = activity as MainActivity
+        adapter = DevicesAdapter(devices, object : DevicesAdapter.Action {
+            override fun itemClicked(device: Device) {
+                startActivity(
+                    Intent(activity, DetailActivity::class.java).apply {
+                        putExtra("DEVICE", gson.toJson(device))
+                    }
+                )
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +81,16 @@ class PositionFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
         super.onViewCreated(view, savedInstanceState)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+        act.devicesLiveData.observe(this, {
+            devicesListRoot.clear()
+            devicesListRoot.addAll(it)
+            if (locationLiveData.value != null) {
+                refreshRecyclerView(locationLiveData.value!!, devicesListRoot)
+            }
+        })
+        locationLiveData.observe(this, {
+            refreshRecyclerView(locationLiveData.value!!, devicesListRoot)
+        })
     }
 
     override fun onMapReady(mapboxMap: MapboxMap) {
@@ -81,9 +116,15 @@ class PositionFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
                 cameraMode = CameraMode.TRACKING
                 renderMode = RenderMode.COMPASS
             }
-            val location = locationComponent.lastKnownLocation
-            if (location != null) {
-                retrieveLocation(Point.fromLngLat(location.longitude, location.latitude))
+            locationLiveData.value = locationComponent.lastKnownLocation
+//            location = locationComponent.lastKnownLocation
+            if (locationLiveData.value != null) {
+                retrieveLocation(
+                    Point.fromLngLat(
+                        locationLiveData.value!!.longitude,
+                        locationLiveData.value!!.latitude
+                    )
+                )
             }
         } else {
             permissionsManager = PermissionsManager(this)
@@ -118,18 +159,25 @@ class PositionFragment : Fragment(), OnMapReadyCallback, PermissionsListener {
     }
 
     private fun initRecyclerView() {
-        updateTextViewDescription(Dummies.Devices.size)
+        updateTextViewDescription(devices.size)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = DevicesAdapter(Dummies.Devices, object : DevicesAdapter.Action {
-            override fun itemClicked(device: Device) {
-                startActivity(
-                    Intent(activity, DetailActivity::class.java).apply {
-                        putExtra("DEVICE", gson.toJson(device))
-                    }
-                )
-            }
+        recyclerView.adapter = adapter
+    }
 
-        })
+    private fun refreshRecyclerView(deviceLocation: Location, deviceListRoot: List<Device>) {
+        devices.clear()
+        deviceListRoot.forEach {
+            val distance = TurfMeasurement.distance(
+                Point.fromLngLat(deviceLocation.longitude, deviceLocation.latitude),
+                Point.fromLngLat(it.longitude, it.latitude),
+                UNIT_KILOMETERS
+            )
+            if (distance <= SENSOR_DISTANCE_THRESHOLD) {
+                devices.add(it)
+            }
+        }
+        updateTextViewDescription(devices.size)
+        adapter.notifyDataSetChanged()
     }
 
     private fun retrieveLocation(location: Point) {

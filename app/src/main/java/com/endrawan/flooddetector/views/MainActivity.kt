@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        startService(Intent(FirebaseBackgroundService::class.java.name))
         Intent(this, FirebaseBackgroundService::class.java).also {
             startService(it)
         }

@@ -40,6 +40,9 @@ class DevicesAdapter(private val devices: List<Device>, private val action: Acti
             if (device.status) {
                 Glide.with(view.context).load(ImageConfig.deviceDanger).centerCrop()
                     .into(image)
+            } else {
+                Glide.with(view.context).load(ImageConfig.deviceNormal).centerCrop()
+                    .into(image)
             }
 
             view.setOnClickListener { action.itemClicked(device) }

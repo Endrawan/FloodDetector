@@ -7,4 +7,6 @@ import com.endrawan.flooddetector.R
 object ImageConfig {
     val deviceDanger =
         ResourcesCompat.getDrawable(App.resourses!!, R.drawable.ic_alert_red_24dp, null)
+    val deviceNormal =
+        ResourcesCompat.getDrawable(App.resourses!!, R.drawable.ic_device, null)
 }
